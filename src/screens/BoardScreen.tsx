@@ -19,26 +19,35 @@ export function BoardScreen() {
   const { setActiveTeam, revealAnswer, addStrike, nextRound } = useGameStore()
   const round = useGameStore(s => s.currentRound())
 
-  const [showInsight, setShowInsight] = useState<number | null>(null)
+  const [showJudgePanel, setShowJudgePanel] = useState(false)
   const [showFacilitatorNote, setShowFacilitatorNote] = useState(false)
 
   const isRevealed = (i: number) => revealedAnswers.some(r => r.index === i)
   const revealedCount = revealedAnswers.length
   const allRevealed = revealedCount === round.answers.length
-
   const activeTeam = teams.find(t => t.id === activeTeamId)
+
+  const handleAward = (i: number) => {
+    if (isRevealed(i)) return
+    revealAnswer(i)
+    setShowJudgePanel(false)
+  }
+
+  const handleStrike = () => {
+    if (activeTeamId) addStrike(activeTeamId)
+    setShowJudgePanel(false)
+  }
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', padding: '24px' }}>
 
       {/* Top bar */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
-        {/* Round label */}
         <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--amber)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
           Round {roundIndex + 1} · {round.category}
         </div>
 
-        {/* Team scores */}
+        {/* Team score buttons — click to set active team */}
         <div style={{ display: 'flex', gap: '12px' }}>
           {teams.map(team => (
             <motion.button
@@ -61,7 +70,7 @@ export function BoardScreen() {
                 {team.score.toLocaleString()}
               </span>
               {strikes[team.id] ? (
-                <span style={{ fontSize: '13px', color: 'var(--red)' }}>
+                <span style={{ fontSize: '13px', color: 'var(--red)', letterSpacing: '0.1em' }}>
                   {'✕'.repeat(strikes[team.id])}
                 </span>
               ) : null}
@@ -83,7 +92,7 @@ export function BoardScreen() {
         </p>
       </div>
 
-      {/* Answer board */}
+      {/* Answer board — covered tiles */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: 1 }}>
         {round.answers.map((answer, i) => {
           const revealed = isRevealed(i)
@@ -91,107 +100,62 @@ export function BoardScreen() {
           const revealedTeam = teams.find(t => t.id === revealedBy?.teamId)
 
           return (
-            <motion.div key={i} layout>
-              <motion.button
-                whileHover={!revealed ? { scale: 1.005, borderColor: 'rgba(255,255,255,0.2)' } : {}}
-                whileTap={!revealed ? { scale: 0.998 } : {}}
-                onClick={() => {
-                  if (!revealed && activeTeamId) {
-                    revealAnswer(i)
-                    setShowInsight(i)
-                  }
-                }}
-                style={{
-                  width: '100%', display: 'flex', alignItems: 'center', gap: '16px',
-                  background: revealed
-                    ? `linear-gradient(135deg, ${POINT_COLORS[answer.points]}18, ${POINT_COLORS[answer.points]}08)`
-                    : 'var(--surface)',
-                  border: `1px solid ${revealed ? POINT_COLORS[answer.points] + '55' : 'var(--border-hover)'}`,
-                  borderRadius: '12px', padding: '16px 20px',
-                  cursor: revealed ? 'default' : activeTeamId ? 'pointer' : 'not-allowed',
-                  textAlign: 'left',
-                }}
-              >
-                {/* Rank number */}
-                <div style={{
-                  width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0,
-                  background: revealed ? POINT_COLORS[answer.points] : 'var(--surface2)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '14px', fontWeight: 800,
-                  color: revealed ? '#000' : 'var(--text-muted)',
-                }}>
-                  {revealed ? i + 1 : '?'}
-                </div>
+            <motion.div
+              key={i}
+              layout
+              style={{
+                display: 'flex', alignItems: 'center', gap: '16px',
+                background: revealed
+                  ? `linear-gradient(135deg, ${POINT_COLORS[answer.points]}18, ${POINT_COLORS[answer.points]}08)`
+                  : 'var(--surface)',
+                border: `1px solid ${revealed ? POINT_COLORS[answer.points] + '55' : 'var(--border-hover)'}`,
+                borderRadius: '12px', padding: '16px 20px',
+              }}
+            >
+              {/* Rank circle */}
+              <div style={{
+                width: '36px', height: '36px', borderRadius: '50%', flexShrink: 0,
+                background: revealed ? POINT_COLORS[answer.points] : 'var(--surface2)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '15px', fontWeight: 900,
+                color: revealed ? '#000' : 'var(--text-muted)',
+              }}>
+                {revealed ? i + 1 : '?'}
+              </div>
 
-                {/* Answer text */}
-                <div style={{ flex: 1 }}>
-                  {revealed ? (
-                    <motion.div
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                    >
-                      <div style={{ fontSize: '16px', color: 'var(--text-primary)', fontWeight: 600, marginBottom: '2px' }}>
-                        {answer.text}
-                      </div>
-                      {revealedTeam && (
-                        <div style={{ fontSize: '12px', color: revealedTeam.color, fontWeight: 600 }}>
-                          {revealedTeam.name}
-                        </div>
-                      )}
-                    </motion.div>
-                  ) : (
-                    <div style={{ fontSize: '15px', color: 'var(--text-muted)' }}>
-                      Answer #{i + 1} — {activeTeamId ? 'click to reveal' : 'select a team first'}
+              {/* Content */}
+              <div style={{ flex: 1, textAlign: 'left' }}>
+                {revealed ? (
+                  <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}>
+                    <div style={{ fontSize: '16px', color: 'var(--text-primary)', fontWeight: 600, marginBottom: '2px' }}>
+                      {answer.text}
                     </div>
-                  )}
-                </div>
-
-                {/* Points */}
-                {revealed && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    style={{
-                      fontSize: '22px', fontWeight: 900,
-                      color: POINT_COLORS[answer.points],
-                      flexShrink: 0,
-                    }}
-                  >
-                    +{answer.points}
-                  </motion.div>
-                )}
-              </motion.button>
-
-              {/* Insight panel */}
-              <AnimatePresence>
-                {revealed && showInsight === i && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    style={{
-                      overflow: 'hidden',
-                      background: 'rgba(245,158,11,0.06)',
-                      border: '1px solid rgba(245,158,11,0.2)',
-                      borderTop: 'none', borderRadius: '0 0 10px 10px',
-                      padding: '14px 20px 14px 68px',
-                    }}
-                  >
-                    <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                    {revealedTeam && (
+                      <div style={{ fontSize: '12px', color: revealedTeam.color, fontWeight: 600 }}>
+                        {revealedTeam.name}
+                      </div>
+                    )}
+                    <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px', lineHeight: 1.5 }}>
                       {answer.insight}
-                    </p>
-                    <button
-                      onClick={() => setShowInsight(null)}
-                      style={{
-                        marginTop: '8px', background: 'none', border: 'none',
-                        fontSize: '12px', color: 'var(--text-muted)', padding: 0,
-                      }}
-                    >
-                      Close
-                    </button>
+                    </div>
                   </motion.div>
+                ) : (
+                  <div style={{ fontSize: '15px', color: 'var(--text-muted)' }}>
+                    Covered
+                  </div>
                 )}
-              </AnimatePresence>
+              </div>
+
+              {/* Points */}
+              {revealed && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  style={{ fontSize: '24px', fontWeight: 900, color: POINT_COLORS[answer.points], flexShrink: 0 }}
+                >
+                  +{answer.points}
+                </motion.div>
+              )}
             </motion.div>
           )
         })}
@@ -199,18 +163,21 @@ export function BoardScreen() {
 
       {/* Controls */}
       <div style={{ marginTop: '20px', display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
-        {activeTeam && (
-          <button
-            onClick={() => addStrike(activeTeam.id)}
-            style={{
-              background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)',
-              borderRadius: '8px', padding: '10px 20px',
-              fontSize: '14px', fontWeight: 700, color: 'var(--red)',
-            }}
-          >
-            ✕ Strike — {activeTeam.name}
-          </button>
-        )}
+        <motion.button
+          whileHover={{ filter: 'brightness(1.1)' }}
+          whileTap={{ scale: 0.97 }}
+          onClick={() => setShowJudgePanel(true)}
+          disabled={!activeTeamId}
+          style={{
+            background: activeTeamId ? 'rgba(245,158,11,0.15)' : 'var(--surface2)',
+            border: `1px solid ${activeTeamId ? 'rgba(245,158,11,0.4)' : 'var(--border-hover)'}`,
+            borderRadius: '8px', padding: '10px 20px',
+            fontSize: '14px', fontWeight: 700,
+            color: activeTeamId ? 'var(--amber)' : 'var(--text-muted)',
+          }}
+        >
+          Judge Answer {activeTeam ? `— ${activeTeam.name}` : '(select a team first)'}
+        </motion.button>
 
         <button
           onClick={() => setShowFacilitatorNote(!showFacilitatorNote)}
@@ -249,8 +216,7 @@ export function BoardScreen() {
             exit={{ opacity: 0, y: 10 }}
             style={{
               marginTop: '16px',
-              background: 'rgba(59,130,246,0.08)',
-              border: '1px solid rgba(59,130,246,0.25)',
+              background: 'rgba(59,130,246,0.08)', border: '1px solid rgba(59,130,246,0.25)',
               borderRadius: '10px', padding: '16px 20px',
             }}
           >
@@ -260,6 +226,126 @@ export function BoardScreen() {
             <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
               {round.facilitatorNote}
             </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Judge Panel — host-only overlay */}
+      <AnimatePresence>
+        {showJudgePanel && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowJudgePanel(false)}
+            style={{
+              position: 'fixed', inset: 0,
+              background: 'rgba(0,0,0,0.8)',
+              backdropFilter: 'blur(6px)',
+              zIndex: 100, display: 'flex',
+              alignItems: 'flex-end', justifyContent: 'center',
+              padding: '24px',
+            }}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 40 }}
+              onClick={e => e.stopPropagation()}
+              style={{
+                background: 'var(--surface)', border: '1px solid var(--border-hover)',
+                borderRadius: '16px', padding: '28px',
+                width: '100%', maxWidth: '680px',
+                maxHeight: '80vh', overflowY: 'auto',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+                <div>
+                  <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--amber)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>
+                    Judge Panel · Host Only
+                  </div>
+                  <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                    Judging for: <span style={{ color: activeTeam?.color }}>{activeTeam?.name}</span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowJudgePanel(false)}
+                  style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '22px', lineHeight: 1 }}
+                >×</button>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
+                {round.answers.map((answer, i) => {
+                  const alreadyRevealed = isRevealed(i)
+                  return (
+                    <div
+                      key={i}
+                      style={{
+                        background: alreadyRevealed ? 'var(--surface2)' : 'var(--bg)',
+                        border: `1px solid ${alreadyRevealed ? 'var(--border)' : 'var(--border-hover)'}`,
+                        borderRadius: '10px', padding: '14px 16px',
+                        opacity: alreadyRevealed ? 0.5 : 1,
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                        <div style={{
+                          width: '28px', height: '28px', borderRadius: '50%', flexShrink: 0,
+                          background: POINT_COLORS[answer.points],
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontSize: '12px', fontWeight: 900, color: '#000',
+                        }}>
+                          {i + 1}
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>
+                            {answer.text}
+                          </div>
+                          <div style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                            {answer.insight}
+                          </div>
+                        </div>
+                        <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                          <div style={{ fontSize: '18px', fontWeight: 900, color: POINT_COLORS[answer.points], marginBottom: '6px' }}>
+                            {answer.points}pts
+                          </div>
+                          {!alreadyRevealed && (
+                            <motion.button
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => handleAward(i)}
+                              style={{
+                                background: POINT_COLORS[answer.points],
+                                color: '#000', border: 'none',
+                                borderRadius: '6px', padding: '6px 14px',
+                                fontSize: '12px', fontWeight: 800,
+                              }}
+                            >
+                              Award →
+                            </motion.button>
+                          )}
+                          {alreadyRevealed && (
+                            <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Already revealed</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+
+              {/* Strike / no match */}
+              <button
+                onClick={handleStrike}
+                style={{
+                  width: '100%',
+                  background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)',
+                  borderRadius: '8px', padding: '12px',
+                  fontSize: '14px', fontWeight: 700, color: 'var(--red)',
+                }}
+              >
+                ✕ No match — Strike {activeTeam?.name}
+              </button>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
