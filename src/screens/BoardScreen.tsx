@@ -18,6 +18,7 @@ export function BoardScreen() {
   const strikes = useGameStore(s => s.strikes)
   const { setActiveTeam, revealAnswer, addStrike, nextRound } = useGameStore()
   const round = useGameStore(s => s.currentRound())
+  if (!round) return null
 
   const [showJudgePanel, setShowJudgePanel] = useState(false)
   const [showFacilitatorNote, setShowFacilitatorNote] = useState(false)
