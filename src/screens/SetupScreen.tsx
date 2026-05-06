@@ -142,9 +142,23 @@ export function SetupScreen() {
           Start Game →
         </motion.button>
 
-        <p style={{ textAlign: 'center', fontSize: '12px', color: 'var(--text-muted)', marginTop: '16px' }}>
-          Facilitator controls everything from this screen — no phones needed
-        </p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '16px' }}>
+          <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+            Facilitator controls everything — no phones needed
+          </p>
+          <a
+            href="/facilitator-guide.html"
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              fontSize: '12px', fontWeight: 700, color: 'var(--amber)',
+              textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px',
+              flexShrink: 0,
+            }}
+          >
+            Facilitator Guide ↗
+          </a>
+        </div>
       </motion.div>
     </div>
   )

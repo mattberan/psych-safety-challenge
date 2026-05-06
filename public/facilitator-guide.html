@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Facilitator Guide — Psych Safety Challenge</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --amber: #D97706;
+      --text: #111827;
+      --muted: #6B7280;
+      --border: #E5E7EB;
+      --surface: #F9FAFB;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      color: var(--text);
+      background: #fff;
+      font-size: 14px;
+      line-height: 1.6;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 48px 40px;
+    }
+
+    .no-print {
+      background: var(--amber);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 40px;
+      font-family: inherit;
+    }
+
+    .header { margin-bottom: 40px; border-bottom: 3px solid var(--amber); padding-bottom: 24px; }
+    .header-label { font-size: 11px; font-weight: 700; color: var(--amber); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+    h1 { font-size: 32px; font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 8px; }
+    .subtitle { font-size: 15px; color: var(--muted); }
+
+    h2 { font-size: 18px; font-weight: 800; margin-bottom: 12px; margin-top: 32px; }
+    h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--amber); text-transform: uppercase; letter-spacing: 0.06em; }
+
+    p { margin-bottom: 12px; }
+
+    .section { margin-bottom: 32px; }
+
+    .flow-step {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 12px;
+      align-items: flex-start;
+    }
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--amber);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .step-text { flex: 1; }
+    .step-text strong { display: block; font-weight: 700; margin-bottom: 2px; }
+
+    .points-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 13px; }
+    .points-table th { background: var(--surface); font-weight: 700; text-align: left; padding: 8px 12px; border: 1px solid var(--border); }
+    .points-table td { padding: 8px 12px; border: 1px solid var(--border); }
+    .points-table tr:nth-child(even) td { background: var(--surface); }
+
+    .round-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      break-inside: avoid;
+    }
+    .round-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .round-num { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .round-category { font-size: 15px; font-weight: 800; }
+    .round-scenario { font-size: 13px; color: var(--muted); margin-bottom: 8px; line-height: 1.5; }
+    .round-note { font-size: 12px; background: #FFFBEB; border-left: 3px solid var(--amber); padding: 8px 12px; border-radius: 0 4px 4px 0; line-height: 1.5; }
+
+    .tip-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .tip-box .tip-label { font-size: 11px; font-weight: 700; color: var(--amber); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+
+    ul { padding-left: 20px; margin-bottom: 12px; }
+    ul li { margin-bottom: 6px; }
+
+    .footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); }
+
+    @media print {
+      .no-print { display: none; }
+      body { padding: 24px 32px; font-size: 12px; }
+      h1 { font-size: 26px; }
+      h2 { font-size: 16px; margin-top: 24px; }
+      .round-card { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="no-print" onclick="window.print()">Print / Save as PDF →</button>
+
+  <div class="header">
+    <div class="header-label">Facilitator Guide</div>
+    <h1>Psych Safety Challenge</h1>
+    <p class="subtitle">A meeting room game for leadership teams. 8 rounds. 2–4 teams. ~45 minutes.</p>
+  </div>
+
+  <div class="section">
+    <h2>What This Game Is</h2>
+    <p>The Psych Safety Challenge is a Family Feud-style game where teams compete to identify what employees actually want to hear in real workplace moments. The twist: the "obvious" answer is often wrong — and the most experienced managers in the room are most likely to get it wrong.</p>
+    <p>Each round presents a scenario. Teams answer verbally. The host judges whether the answer is close enough to one of the 5 ranked options and awards points. The ranking reflects employee preferences based on psychological safety research.</p>
+  </div>
+
+  <div class="section">
+    <h2>Setup (5 minutes)</h2>
+    <div class="flow-step">
+      <div class="step-num">1</div>
+      <div class="step-text"><strong>Open the game on a laptop</strong> Share your screen to a TV or projector. The game is designed for a single facilitator-controlled screen — no phones needed.</div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">2</div>
+      <div class="step-text"><strong>Divide into teams</strong> 2–4 teams work well. 3–6 people per team is ideal. Name your teams on the setup screen.</div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">3</div>
+      <div class="step-text"><strong>Brief the room</strong> "We're going to look at real workplace scenarios. Your job is to figure out what employees actually want to hear — not what sounds good in theory."</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>How a Round Works</h2>
+    <div class="flow-step">
+      <div class="step-num">1</div>
+      <div class="step-text"><strong>Read the scenario out loud</strong> Give teams 30–60 seconds to discuss quietly before answering.</div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">2</div>
+      <div class="step-text"><strong>Take an answer from one team</strong> Click their team name at the top to make them active (it highlights).</div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">3</div>
+      <div class="step-text"><strong>Open the Judge Panel</strong> Click "Judge Answer" — only you can see this. It shows all 5 answers with points.</div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">4</div>
+      <div class="step-text"><strong>Award or strike</strong> If their answer is close enough to one on the board, click Award. If not, click Strike. After 2 strikes, the other team gets to steal.</div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">5</div>
+      <div class="step-text"><strong>Discuss</strong> After each reveal, the insight text shows automatically. Use the Facilitator Note button for deeper discussion prompts.</div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">6</div>
+      <div class="step-text"><strong>Next Round</strong> You can move on at any time — you don't need to reveal all 5 answers. Hit "Next Round" when the discussion is rich enough.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Scoring</h2>
+    <table class="points-table">
+      <thead>
+        <tr><th>Rank</th><th>What It Means</th><th>Points</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>#1</td><td>Most preferred by employees — highest trust response</td><td>500</td></tr>
+        <tr><td>#2</td><td>Strong response — collaborative, supportive</td><td>400</td></tr>
+        <tr><td>#3</td><td>Good but incomplete — validates without acting</td><td>300</td></tr>
+        <tr><td>#4</td><td>Well-intentioned but disempowering</td><td>200</td></tr>
+        <tr><td>#5</td><td>Common management default — lowest trust response</td><td>100</td></tr>
+      </tbody>
+    </table>
+    <p>Points are cumulative across all 8 rounds. The team with the most points at the end wins.</p>
+  </div>
+
+  <div class="section">
+    <h2>Facilitation Tips</h2>
+
+    <div class="tip-box">
+      <div class="tip-label">Let experienced managers go first</div>
+      <p>Senior managers tend to give the most confident wrong answers. Their reactions when the board reveals are the most powerful moments in the room.</p>
+    </div>
+
+    <div class="tip-box">
+      <div class="tip-label">Use "Why?" as your main tool</div>
+      <p>After every reveal, ask: "Why do you think employees ranked that higher than the more direct response?" The discussion is the learning — not the score.</p>
+    </div>
+
+    <div class="tip-box">
+      <div class="tip-label">Watch for the "I hear you, but..."</div>
+      <p>Round 2 (Public Disagreement) consistently surfaces managers who use this phrase. Name it when it happens — it's one of the most insight-generating moments.</p>
+    </div>
+
+    <div class="tip-box">
+      <div class="tip-label">Round 8 hits hardest</div>
+      <p>The Mistake You Made is the most powerful round. Consider saving extra time for discussion here — many managers have never been asked to model public accountability. Let the silence breathe.</p>
+    </div>
+
+    <div class="tip-box">
+      <div class="tip-label">You don't have to finish all 8 rounds</div>
+      <p>If the room is deep in discussion after Round 5, stay there. The game is a vehicle for conversation, not a race.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Round Reference</h2>
+
+    <div class="round-card">
+      <div class="round-header"><span class="round-num">Round 1</span></div>
+      <div class="round-category">When Things Go Wrong</div>
+      <div class="round-scenario">Your top performer sent a report with a major error to a client. They come to you looking mortified.</div>
+      <div class="round-note">Watch for: managers who jump to "I'll handle it." Sounds decisive — employees experience it as disempowering.</div>
+    </div>
+
+    <div class="round-card">
+      <div class="round-header"><span class="round-num">Round 2</span></div>
+      <div class="round-category">Public Disagreement</div>
+      <div class="round-scenario">A junior employee directly contradicts your recommendation in front of the whole team.</div>
+      <div class="round-note">Watch for: "let's take this offline." Feels diplomatic — signals to the room that public disagreement is unwelcome.</div>
+    </div>
+
+    <div class="round-card">
+      <div class="round-header"><span class="round-num">Round 3</span></div>
+      <div class="round-category">The Disengaged Star</div>
+      <div class="round-scenario">Your highest performer is checked out. They say "I'm fine" in your 1:1.</div>
+      <div class="round-note">Watch for: pivoting immediately to missed deadlines. The employee hears: "I'm here to manage output, not you."</div>
+    </div>
+
+    <div class="round-card">
+      <div class="round-header"><span class="round-num">Round 4</span></div>
+      <div class="round-category">The Bad Idea</div>
+      <div class="round-scenario">Someone proposes an idea in a brainstorm that you're 90% sure won't work.</div>
+      <div class="round-note">Watch for: "we tried that before." The most idea-killing phrase in management — almost always said by the most experienced person in the room.</div>
+    </div>
+
+    <div class="round-card">
+      <div class="round-header"><span class="round-num">Round 5</span></div>
+      <div class="round-category">Team Conflict</div>
+      <div class="round-scenario">Two of your best people are in open conflict affecting the whole team.</div>
+      <div class="round-note">Watch for: jumping straight to the joint meeting. Separate conversations first is the #1 thing managers skip.</div>
+    </div>
+
+    <div class="round-card">
+      <div class="round-header"><span class="round-num">Round 6</span></div>
+      <div class="round-category">Delivering Hard Feedback</div>
+      <div class="round-scenario">A solid employee asks directly: "Am I on track for a promotion?" They're not.</div>
+      <div class="round-note">Watch for: "you're doing great, let's see how the next few months go." Employees will be blindsided at review and lose trust in all future positive feedback.</div>
+    </div>
+
+    <div class="round-card">
+      <div class="round-header"><span class="round-num">Round 7</span></div>
+      <div class="round-category">Taking Credit</div>
+      <div class="round-scenario">Your manager presents your team's work to execs and takes full credit.</div>
+      <div class="round-note">Watch for: "it reflects well on the whole team anyway." Teams notice exactly who gets named and who doesn't. Always.</div>
+    </div>
+
+    <div class="round-card">
+      <div class="round-header"><span class="round-num">Round 8</span></div>
+      <div class="round-category">The Mistake You Made</div>
+      <div class="round-scenario">You made a call that set the team back two weeks. Your team knows it. You're in standup.</div>
+      <div class="round-note">This is the most powerful round. Full public ownership, without hedging, is the highest-trust response — and the one most leaders avoid. Let the room sit with that.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>The Research Behind It</h2>
+    <ul>
+      <li><strong>Amy Edmondson</strong> (Harvard) — Psychological safety is the #1 predictor of high-performing teams. It's not about being nice; it's about making people feel safe to speak up, take risks, and be honest.</li>
+      <li><strong>Google Project Aristotle</strong> — After studying 180 teams, psychological safety was the single most important factor in team effectiveness — above skills, seniority, or structure.</li>
+      <li><strong>Kim Scott</strong> (Radical Candor) — The kindest thing a manager can do is tell people the truth early enough to change. Avoiding hard feedback isn't kindness — it's self-protection.</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    <p>Psych Safety Challenge · Built by Matt Beran · <a href="https://mattberan.com">mattberan.com</a> · Based on research by Amy Edmondson, Google Project Aristotle, and Kim Scott</p>
+  </div>
+
+</body>
+</html>
