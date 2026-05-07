@@ -147,6 +147,15 @@ export function FinalScreen() {
         <p style={{ marginTop: '24px', fontSize: '12px', color: 'var(--text-muted)' }}>
           Based on research by Amy Edmondson · Google Project Aristotle · Kim Scott
         </p>
+
+        <a
+          href="https://invgate.com/?utm_source=mattberandotcom&utm_medium=matt-organic&utm_campaign=psych_safety"
+          target="_blank"
+          rel="noreferrer"
+          style={{ display: 'block', marginTop: '24px' }}
+        >
+          <img src="/invgate-banner.png" alt="InvGate Service Management" style={{ width: '100%', maxWidth: '480px', borderRadius: '8px', display: 'block', margin: '0 auto', opacity: 0.9 }} />
+        </a>
       </motion.div>
     </div>
   )
